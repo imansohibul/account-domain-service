@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
+	"github.com/avast/retry-go"
 	"github.com/shopspring/decimal"
 	"imansohibul.my.id/account-domain-service/entity"
 	"imansohibul.my.id/account-domain-service/util"
@@ -84,6 +86,7 @@ func (a accountUsecase) CreateAccount(ctx context.Context, params *entity.Create
 			return err
 		}
 
+		// Check account
 		account, err = a.createAccountWithRetry(ctx, customer, DefaultMaxRetries)
 		if err != nil {
 			return err
@@ -108,26 +111,28 @@ func (a accountUsecase) createAccountWithRetry(ctx context.Context, customer *en
 		}
 	)
 
-	for attempt := 1; attempt <= maxRetries; attempt++ {
-		account.AccountNumber, err = util.GenerateSecureNumber(DefaultAccountNumberLength)
-		if err != nil {
-			return nil, fmt.Errorf("failed to generate account number: %w", err)
-		}
+	// Retry mechanism using retry-go
+	err = retry.Do(
+		func() error {
+			account.AccountNumber, err = util.GenerateSecureNumber(DefaultAccountNumberLength)
+			if err != nil {
+				return fmt.Errorf("failed to generate account number: %w", err)
+			}
 
-		// Attempt to insert the account into the database
-		account, err = a.accountRepository.CreateAccount(ctx, account)
-		if err != nil && err != entity.ErrDuplicateAccountNumber {
-			return nil, fmt.Errorf("failed to create account: %w", err)
-		} else if err != nil {
-			fmt.Printf("Attempt %d: Duplicate account number %s, retrying...\n", attempt, account.AccountNumber)
-			time.Sleep(time.Duration(attempt) * time.Second)
-			continue
-		}
+			account, err = a.accountRepository.CreateAccount(ctx, account)
+			return err
+		},
+		retry.Attempts(uint(maxRetries)),
+		retry.DelayType(retry.FixedDelay),
+		retry.Delay(10*time.Microsecond),
+		retry.RetryIf(func(err error) bool {
+			return errors.Is(err, entity.ErrDuplicateAccountNumber)
+		}),
+	)
 
-		// Account successfully created, exit
-		return account, nil
+	if err != nil {
+		return nil, fmt.Errorf("failed to create account after %d attempts: %w", maxRetries, err)
 	}
 
-	// If all attempts failed, return the last error encountered
-	return nil, fmt.Errorf("failed to create account after %d attempts: %w", maxRetries, err)
+	return account, nil
 }
