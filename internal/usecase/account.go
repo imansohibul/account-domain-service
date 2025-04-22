@@ -44,7 +44,7 @@ func NewAccountUsecase(
 func (a accountUsecase) CreateAccount(ctx context.Context, params *entity.CreateAccountParams) (*entity.Account, error) {
 	// Check if phone number already exists
 	customer, err := a.customerRepository.FindByPhoneNumber(ctx, params.PhoneNumber)
-	if err != nil && err != entity.ErrNotFound {
+	if err != nil && err != entity.ErrCustomerNotFound {
 		return nil, err
 	}
 
@@ -54,12 +54,12 @@ func (a accountUsecase) CreateAccount(ctx context.Context, params *entity.Create
 
 	// Check if customer already exists
 	customerIdentity, err := a.customerIdentityRepository.FindByIdentity(ctx, entity.IdentityTypeNIK, params.IdentityNumber)
-	if err != nil && err != entity.ErrNotFound {
+	if err != nil && err != entity.ErrCustomerIdentityNotFound {
 		return nil, err
 	}
 
 	if customerIdentity != nil {
-		return nil, entity.ErrCustomerAlreadyExists
+		return nil, entity.ErrCustomerIdentityAlreadyExists
 	}
 
 	account := new(entity.Account)

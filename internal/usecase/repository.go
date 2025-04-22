@@ -11,7 +11,7 @@ type TransactionManager interface {
 }
 
 type AccountRepository interface {
-	FindByAccountNumber(ctx context.Context, accountNumber string) (*entity.Account, error)
+	FindByAccountNumber(ctx context.Context, accountType entity.AccountType, accountNumber string, lock bool) (*entity.Account, error)
 	CreateAccount(ctx context.Context, account *entity.Account) (*entity.Account, error)
 }
 
