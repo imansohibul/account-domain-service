@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS customer_identities (
     id BIGSERIAL PRIMARY KEY,                -- Auto-incrementing ID
     customer_id BIGINT NOT NULL,             -- Foreign key to customers table
     identity_type SMALLINT NOT NULL,         -- e.g. 1 = NIK, 2 = Passport, etc.
-    identity_number VARCHAR(32) NOT NULL  ,  -- e.g. NIK, Passport Number, etc.
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Automatically set creation timestamp
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Automatically set updated timestamp
+    identity_number VARCHAR(32) NOT NULL,    -- e.g. NIK, Passport Number, etc.
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Automatically set creation timestamp
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Automatically set updated timestamp
 
-    CONSTRAINT uq_customer_identity_type UNIQUE(customer_id, identity_type),      -- prevent duplicates
+    CONSTRAINT uq_customer_identity_type UNIQUE(customer_id, identity_type)     -- prevent duplicates
 );

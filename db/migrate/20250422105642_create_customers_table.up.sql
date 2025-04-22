@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS customers (
     fullname VARCHAR(255) NOT NULL,        -- Full name of the customer
     phone_number VARCHAR(16),              -- Phone number of the customer, Standardization (E.164 format - International Compatibility)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Automatically set creation timestamp
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Automatically set updated timestamp
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Automatically set updated timestamp
 
     CONSTRAINT uq_customer_phone_number UNIQUE(phone_number)  -- Prevent duplicates
 );
