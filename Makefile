@@ -1,9 +1,6 @@
-# Default db migration settings
-export DB_USERNAME ?= account_domain_rw_dev
-export DB_PASSWORD ?= passdev
-export DB_HOST ?= localhost
-export DB_PORT ?= 3306
-export DB_NAME ?= accountdb
+# Load .env file
+include .env
+export
 
 UNAME := $(shell uname)
 
