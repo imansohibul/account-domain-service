@@ -4,7 +4,7 @@
 -- The phone number is standardized to E.164 format for international compatibility.
 -- The table also includes a unique constraint on the phone number to prevent duplicates.
 CREATE TABLE IF NOT EXISTS customers (
-    id BIGSERIAL PRIMARY KEY,                 -- Auto-incrementing ID
+    id BIGSERIAL PRIMARY KEY,              -- Auto-incrementing ID
     fullname VARCHAR(255) NOT NULL,        -- Full name of the customer
     phone_number VARCHAR(16),              -- Phone number of the customer, Standardization (E.164 format - International Compatibility)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Automatically set creation timestamp
