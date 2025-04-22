@@ -3,6 +3,7 @@ module imansohibul.my.id/account-domain-service
 go 1.24.2
 
 require (
+	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/go-playground/validator/v10 v10.26.0
 	github.com/go-rel/rel v0.42.0
 	github.com/labstack/echo/v4 v4.13.3
