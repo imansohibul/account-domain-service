@@ -6,8 +6,7 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 
 ![Go Version](https://img.shields.io/badge/go-1.24%2B-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17.4-blue)
-[![Docker Compose](https://img.shields.io/badge/docker--compose-3.9-blue)](https://docs.docker.com/compose/compose-file/compose-versioning/#version-39)
-
+[![Docker](https://img.shields.io/badge/docker-24.0-blue?logo=docker)](https://www.docker.com/)
 [![Docker Compose](https://img.shields.io/badge/docker--compose-3.9-blue)](https://docs.docker.com/compose/compose-file/compose-versioning/#version-39)
 
 
