@@ -2,11 +2,13 @@ package util
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"imansohibul.my.id/account-domain-service/entity"
 )
 
 var (
@@ -31,7 +33,9 @@ type zapLogger struct {
 // GetZapLogger returns a singleton instance of Logger
 func GetZapLogger() Logger {
 	once.Do(func() {
-		z, _ := zap.NewProduction() // or zap.NewDevelopment() for dev mode
+		z, _ := zap.NewProduction(
+			zap.AddCallerSkip(2),
+		)
 		instance = &zapLogger{log: z}
 	})
 	return instance
@@ -70,7 +74,14 @@ func (l *zapLogger) WithDuration(ctx context.Context, operation string, fields m
 	return func(err *error) {
 		fields["duration"] = time.Since(start).Milliseconds()
 		if err != nil && *err != nil {
-			l.Error(ctx, operation, *err, fields)
+			er := *err
+			domainError, isDomainError := er.(*entity.DomainError)
+			if isDomainError {
+				l.Warn(ctx, fmt.Sprintf("%s:%s", operation, domainError.Error()), fields)
+			} else {
+				l.Error(ctx, operation, *err, fields)
+			}
+
 		} else {
 			l.Info(ctx, operation, fields)
 		}

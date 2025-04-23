@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/go-rel/postgres"
@@ -73,8 +74,12 @@ func initPostgresDatabase(cfg ServiceConfig) (rel.Repository, error) {
 
 // DatabaseLogger instrumentation to log queries and rel operation.
 func DatabaseLogger(ctx context.Context, op string, message string, args ...any) func(err error) {
-	start := time.Now()
+	// no op for rel functions.
+	if strings.HasPrefix(op, "rel-") {
+		return func(error) {}
+	}
 
+	start := time.Now()
 	return func(err error) {
 		duration := time.Since(start)
 		fields := map[string]interface{}{
