@@ -142,7 +142,7 @@ cd account-domainn-service
 
 ## 2. Configure Environment
 ```bash
-cp .env.sample .env
+cp env.sample .env
 nano .env  # Edit with your configuration
 ```
 
