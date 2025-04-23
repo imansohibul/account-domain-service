@@ -40,7 +40,7 @@ endif
 migrate: install-go-migrate-tool
 	@bin/migrate -source file://db/migrate -database "postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable" $(MIGRATE_ARGS) $(N)
 
-generate-db-migration: install-go-migrate-tool
+create-db-migration: install-go-migrate-tool
 	@bin/migrate create -ext sql -dir db/migrate $(MIGRATE_NAME)
 
 tool-mockgen:

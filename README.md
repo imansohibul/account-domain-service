@@ -116,7 +116,7 @@ make run
 ## 4. Database Migrations
 ### Create New Migration
 ```bash
-make generate-db-migration MIGRATE_NAME=init_schema
+make create-db-migration MIGRATE_NAME=init_schema
 ```
 This creates new files in db/migrate/
 
@@ -149,7 +149,7 @@ Generates mock files using mockgen
 | `make migrate up`        | Apply all pending migrations             | `make migrate up`                |
 | `make migrate down`      | Rollback migrations                      | `make migrate down N=1`          |
 | `make migrate status`    | Check migration status                   | `make migrate status`            |
-| `make generate-db-migration` | Create new migration file            | `make generate-db-migration NAME=create_users` |
+| `make create-db-migration` | Create new migration file            | `make generate-db-migration NAME=create_users` |
 | `docker-compose up`      | Start all services with Docker           | `docker-compose up -d`           |
 | `docker-compose logs`    | View service logs                        | `docker-compose logs -f account-service` |
 
