@@ -61,7 +61,7 @@ func (w withdrawUsecase) Withdraw(ctx context.Context, accountNumber string, amo
 
 		transaction.AccountID = account.ID
 		transaction.Amount = amount
-		transaction.Type = entity.TransactionTypeCredit
+		transaction.Type = entity.TransactionTypeDebit
 		transaction.InitialBalance = account.Balance
 		transaction.FinalBalance = account.Balance.Sub(amount)
 		transaction.Currency = account.Currency
