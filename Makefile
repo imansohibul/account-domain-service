@@ -2,7 +2,21 @@
 include .env
 export
 
+ODIR 	:= build/_output
 UNAME := $(shell uname)
+
+
+build: generate format
+	go build -o ./$(ODIR)/account-service ./cmd
+
+run: build
+	./$(ODIR)/account-service api
+
+generate:
+	go generate ./...
+
+format:
+	go fmt ./...
 
 bin:
 	@mkdir -p bin

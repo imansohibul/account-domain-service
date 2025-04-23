@@ -7,14 +7,19 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/urfave/cli/v2"
 	"imansohibul.my.id/account-domain-service/config"
 	"imansohibul.my.id/account-domain-service/internal/rest/server"
 	"imansohibul.my.id/account-domain-service/util"
 )
 
-var logger = util.GetZapLogger()
+var logger util.Logger
 
-func main() {
+func init() {
+	logger = util.GetZapLogger()
+}
+
+func RestAPI(c *cli.Context) error {
 	ctx := context.Background()
 
 	restAPIServer, err := config.NewRestAPI()
@@ -33,6 +38,7 @@ func main() {
 
 	<-idleConnsClosed
 	logger.Info(ctx, "Server shut down gracefully", nil)
+	return nil
 }
 
 func handleGracefulShutdown(ctx context.Context, restAPIServer *server.RestAPIServer, done chan struct{}) {
