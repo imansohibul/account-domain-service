@@ -57,7 +57,7 @@ This project follows a **modular clean architecture** pattern. It ensures high m
   - `account-service`: The account-domain-service (REST API).
   - `postgres-db`: The PostgreSQL database.
 
-> Database service and API container are in the same Docker network, allowing the API to resolve the DB hostname directly using `db:5432`.
+> Database service and API container are in the same Docker network, allowing the API to resolve the DB hostname directly using `postgres-db:5432`.
 
 ---
 
