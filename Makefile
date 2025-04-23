@@ -5,6 +5,9 @@ export
 ODIR 	:= build/_output
 UNAME := $(shell uname)
 
+download:
+	go mod download
+	go mod tidy
 
 build: generate format
 	go build -o ./$(ODIR)/account-service ./cmd
