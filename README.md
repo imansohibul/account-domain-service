@@ -150,11 +150,6 @@ nano .env  # Edit with your configuration
 ## 3. Running the Service
 ### Option A: With Docker
 ```bash
-cp .env.sample .env
-nano .env  # Edit with your configuration
-```
-
-```bash
 # Start all services (app + PostgreSQL)
 docker-compose up -d --build
 
