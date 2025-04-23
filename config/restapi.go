@@ -4,6 +4,7 @@ import (
 	"imansohibul.my.id/account-domain-service/internal/repository"
 	"imansohibul.my.id/account-domain-service/internal/rest/server"
 	"imansohibul.my.id/account-domain-service/internal/usecase"
+	"imansohibul.my.id/account-domain-service/util"
 )
 
 func NewRestAPI() (*server.RestAPIServer, error) {
@@ -15,6 +16,9 @@ func NewRestAPI() (*server.RestAPIServer, error) {
 
 	// Initialize database connection
 	db := initPostgresDatabase(serviceConfig)
+
+	// Initialize logger
+	logger := util.NewZapLogger()
 
 	// Initialize repositories
 	var (
@@ -32,7 +36,9 @@ func NewRestAPI() (*server.RestAPIServer, error) {
 			transactionManager,
 			customerRepository,
 			customerIdentityRepository,
-			transactionRepository)
+			transactionRepository,
+			logger,
+		)
 	)
 
 	// Initialize Rest API server

@@ -25,6 +25,7 @@ type createAccountUsecase struct {
 	customerRepository         CustomerRepository
 	customerIdentityRepository CustomerIdentityRepository
 	transactionRepository      TransactionRepository
+	logger                     util.Logger
 }
 
 func NewCreateAccountUsecase(
@@ -33,6 +34,7 @@ func NewCreateAccountUsecase(
 	customerRepository CustomerRepository,
 	customerIdentityRepository CustomerIdentityRepository,
 	transactionRepository TransactionRepository,
+	logger util.Logger,
 ) *createAccountUsecase {
 	return &createAccountUsecase{
 		accountRepository:          accountRepository,
@@ -40,10 +42,26 @@ func NewCreateAccountUsecase(
 		customerRepository:         customerRepository,
 		customerIdentityRepository: customerIdentityRepository,
 		transactionRepository:      transactionRepository,
+		logger:                     logger,
 	}
 }
 
 func (a createAccountUsecase) CreateAccount(ctx context.Context, params *entity.CreateAccountParams) (*entity.Account, error) {
+	var (
+		err    error
+		logger = a.logger.WithDuration(
+			ctx,
+			"createAccountUsecase.CreateAccount",
+			map[string]interface{}{
+				"fullname":        params.Fullname,
+				"phone_number":    params.PhoneNumber,
+				"identity_number": params.IdentityNumber,
+			},
+		)
+	)
+
+	defer logger(err)
+
 	// Check if phone number already exists
 	customer, err := a.customerRepository.FindByPhoneNumber(ctx, params.PhoneNumber)
 	if err != nil && err != entity.ErrCustomerNotFound {
@@ -68,7 +86,7 @@ func (a createAccountUsecase) CreateAccount(ctx context.Context, params *entity.
 
 	err = a.transactionManager.WithTransaction(ctx, func(ctx context.Context) error {
 		// Create customer
-		customer, err := a.customerRepository.CreateCustomer(ctx, &entity.Customer{
+		customer, err = a.customerRepository.CreateCustomer(ctx, &entity.Customer{
 			Fullname:    params.Fullname,
 			PhoneNumber: params.PhoneNumber,
 		})
@@ -127,6 +145,16 @@ func (a createAccountUsecase) createAccountWithRetry(ctx context.Context, custom
 		retry.Delay(10*time.Microsecond),
 		retry.RetryIf(func(err error) bool {
 			return errors.Is(err, entity.ErrDuplicateAccountNumber)
+		}),
+		retry.OnRetry(func(n uint, err error) {
+			// log the retry attempt
+			a.logger.Warn(ctx,
+				"Retrying account creation due to duplicate account number",
+				map[string]interface{}{
+					"attempt": n,
+					"error":   err.Error(),
+				},
+			)
 		}),
 	)
 
