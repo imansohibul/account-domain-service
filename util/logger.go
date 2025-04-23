@@ -22,7 +22,6 @@ type Logger interface {
 	Fatal(ctx context.Context, msg string, err error, fields map[string]interface{})
 
 	WithDuration(ctx context.Context, operation string, fields map[string]interface{}) func(err *error)
-	Sync() error
 }
 
 type zapLogger struct {
@@ -76,10 +75,6 @@ func (l *zapLogger) WithDuration(ctx context.Context, operation string, fields m
 			l.Info(ctx, operation, fields)
 		}
 	}
-}
-
-func (l *zapLogger) Sync() error {
-	return l.log.Sync()
 }
 
 func convertFields(fields map[string]interface{}) []zapcore.Field {
