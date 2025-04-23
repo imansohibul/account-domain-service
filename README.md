@@ -150,7 +150,7 @@ Generates mock files using mockgen
 | `make migrate up`        | Apply all pending migrations             | `make migrate up`                |
 | `make migrate down`      | Rollback migrations                      | `make migrate down N=1`          |
 | `make migrate status`    | Check migration status                   | `make migrate status`            |
-| `make create-db-migration` | Create new migration file            | `make generate-db-migration NAME=create_users` |
+| `make create-db-migration` | Create new migration file            | `make create-db-migration NAME=create_users` |
 | `docker-compose up`      | Start all services with Docker           | `docker-compose up -d`           |
 | `docker-compose logs`    | View service logs                        | `docker-compose logs -f account-service` |
 
