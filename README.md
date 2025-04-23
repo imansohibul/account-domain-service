@@ -61,6 +61,63 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 
 ---
 
+# Database Scheme
+
+<p align="center">
+  <img src="database_schema.svg" alt="Description" width="100%"/>
+</p>
+
+### 📝 Table Descriptions
+### 📝`customers`
+
+| Column Name    | Type           | Description                                                                 |
+|----------------|----------------|-----------------------------------------------------------------------------|
+| `id`           | `BIGSERIAL`    | Auto-incrementing primary key ID.                                           |
+| `fullname`     | `VARCHAR(255)` | Full name of the customer. Cannot be null.                                 |
+| `phone_number` | `VARCHAR(16)`  | Customer's phone number in E.164 format (international standard). Unique.  |
+| `created_at`   | `TIMESTAMP`    | Timestamp of when the record was created. Defaults to current timestamp.   |
+| `updated_at`   | `TIMESTAMP`    | Timestamp of the last update. Defaults to current timestamp.               |
+
+### 📝 `customer_identities`
+
+| Column Name      | Type             | Description                                                                 |
+|------------------|------------------|-----------------------------------------------------------------------------|
+| `id`             | `BIGSERIAL`      | Auto-incrementing primary key ID.                                           |
+| `customer_id`    | `BIGINT`         | References the customer in the `customers` table. Cannot be null.          |
+| `identity_type`  | `SMALLINT`       | Type of identity (e.g., `1 = NIK`, `2 = Passport`, etc.). Cannot be null.  |
+| `identity_number`| `VARCHAR(32)`    | Actual ID number (e.g., NIK or passport number). Cannot be null.           |
+| `created_at`     | `TIMESTAMP`      | Timestamp when the record was created. Defaults to current timestamp.      |
+| `updated_at`     | `TIMESTAMP`      | Timestamp of the last update. Defaults to current timestamp.               |
+
+### 📝 `accounts`
+
+| Column Name     | Type              | Description                                                                 |
+|-----------------|-------------------|-----------------------------------------------------------------------------|
+| `id`            | `BIGSERIAL`       | Auto-incrementing primary key ID.                                           |
+| `customer_id`   | `BIGINT`          | References the customer in the `customers` table. Cannot be null.          |
+| `account_number`| `VARCHAR(16)`     | Unique account number. Cannot be null.                                     |
+| `account_type`  | `SMALLINT`        | Type of account (e.g., `1 = Savings`). Cannot be null.                      |
+| `status`        | `SMALLINT`        | Status of the account (`1 = Active`). Default is `1`.                       |
+| `balance`       | `NUMERIC(15, 2)`  | Account balance. Default is `0`. Cannot be null.                            |
+| `currency`      | `SMALLINT`        | Currency code (e.g., `1 = IDR`, based on ISO 4217). Default is `1`.        |
+| `created_at`    | `TIMESTAMP`       | Timestamp when the record was created. Defaults to current timestamp.      |
+| `updated_at`    | `TIMESTAMP`       | Timestamp of the last update. Defaults to current timestamp.               |
+
+### 📝 `transactions`
+
+| Column Name     | Type              | Description                                                                 |
+|-----------------|-------------------|-----------------------------------------------------------------------------|
+| `id`            | `SERIAL`          | Auto-incrementing primary key ID.                                           |
+| `account_id`    | `INT`             | References the account ID (foreign key). Cannot be null.                   |
+| `type`          | `SMALLINT`        | Type of transaction (e.g., `1 = Debit`, `2 = Credit`). Cannot be null.     |
+| `amount`        | `DECIMAL(15, 2)`  | Amount involved in the transaction. Cannot be null.                         |
+| `initial_balance`| `DECIMAL(15, 2)` | Balance before the transaction. Cannot be null.                             |
+| `final_balance` | `DECIMAL(15, 2)`  | Balance after the transaction. Cannot be null.                              |
+| `currency`      | `SMALLINT`        | Currency code (e.g., `1 = IDR` based on ISO 4217). Default is `1`.         |
+| `created_at`    | `TIMESTAMP`       | Timestamp when the record was created. Defaults to current timestamp.      |
+| `updated_at`    | `TIMESTAMP`       | Timestamp of the last update. Defaults to current timestamp.               |
+
+
 # Development Guide
 
 ## Introduction
