@@ -61,7 +61,7 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 
 ---
 
-# Database Scheme
+# Database Schema
 
 <p align="center">
   <img src="database_schema.svg" alt="Description" width="100%"/>
