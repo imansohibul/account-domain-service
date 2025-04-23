@@ -20,6 +20,7 @@ func init() {
 }
 
 func RestAPI(c *cli.Context) error {
+	address := c.String("address")
 	ctx := context.Background()
 
 	restAPIServer, err := config.NewRestAPI()
@@ -32,7 +33,7 @@ func RestAPI(c *cli.Context) error {
 	go handleGracefulShutdown(ctx, restAPIServer, idleConnsClosed)
 
 	logger.Info(ctx, "Starting REST API server...", nil)
-	if err := restAPIServer.Start(); err != http.ErrServerClosed {
+	if err := restAPIServer.Start(address); err != http.ErrServerClosed {
 		logger.Fatal(ctx, "REST API server stopped with error", err, nil)
 	}
 

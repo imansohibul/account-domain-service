@@ -26,8 +26,8 @@ func main() {
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:  "address",
-						Value: ":8080",
-						Usage: "The address parameter defines the server address and port number that the server will listen on.",
+						Value: ":8080", // default value
+						Usage: "The address parameter defines the server address and port number (e.g localhost:8080) that the server will listen on.",
 					},
 				},
 			},

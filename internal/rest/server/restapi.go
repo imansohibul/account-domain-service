@@ -63,10 +63,10 @@ func (s *RestAPIServer) setupAccountRoutes() {
 }
 
 // Start launches the Echo HTTP server
-func (s *RestAPIServer) Start() error {
+func (s *RestAPIServer) Start(address string) error {
 	s.registerValidator()
 	s.setupAccountRoutes()
-	return s.echo.Start(":8080")
+	return s.echo.Start(address)
 }
 
 // Shutdown gracefully shuts down the server
