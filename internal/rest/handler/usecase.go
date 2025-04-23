@@ -7,6 +7,8 @@ import (
 	"imansohibul.my.id/account-domain-service/entity"
 )
 
+//go:generate mockgen -destination=mock/usecase.go -package=mock -source=usecase.go
+
 type CreateAccountUsecase interface {
 	// CreateAccount creates a new account
 	// returns the created account

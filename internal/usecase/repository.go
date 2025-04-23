@@ -6,6 +6,8 @@ import (
 	"imansohibul.my.id/account-domain-service/entity"
 )
 
+//go:generate mockgen -destination=mock/repository.go -package=mock -source=repository.go
+
 type TransactionManager interface {
 	WithTransaction(ctx context.Context, fn func(ctx context.Context) error) error
 }

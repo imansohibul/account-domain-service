@@ -12,7 +12,7 @@ build: generate format
 run: build
 	./$(ODIR)/account-service api
 
-generate:
+generate: tool-mockgen
 	go generate ./...
 
 format:
@@ -39,3 +39,6 @@ migrate: install-go-migrate-tool
 
 generate-db-migration: install-go-migrate-tool
 	@bin/migrate create -ext sql -dir db/migrate $(MIGRATE_NAME)
+
+tool-mockgen:
+	@go install github.com/golang/mock/mockgen@v1.6.0
