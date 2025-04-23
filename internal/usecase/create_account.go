@@ -18,8 +18,8 @@ const DefaultAccountNumberLength = 10
 // DefaultMaxRetries is the maximum number of retries for creating an account
 const DefaultMaxRetries = 3
 
-// accountUsecase implements the AccountUsecase interface
-type accountUsecase struct {
+// createAccountUsecase implements the CreateAccountUsecase interface
+type createAccountUsecase struct {
 	accountRepository          AccountRepository
 	transactionManager         TransactionManager
 	customerRepository         CustomerRepository
@@ -27,14 +27,14 @@ type accountUsecase struct {
 	transactionRepository      TransactionRepository
 }
 
-func NewAccountUsecase(
+func NewCreateAccountUsecase(
 	accountRepository AccountRepository,
 	transactionManager TransactionManager,
 	customerRepository CustomerRepository,
 	customerIdentityRepository CustomerIdentityRepository,
 	transactionRepository TransactionRepository,
-) *accountUsecase {
-	return &accountUsecase{
+) *createAccountUsecase {
+	return &createAccountUsecase{
 		accountRepository:          accountRepository,
 		transactionManager:         transactionManager,
 		customerRepository:         customerRepository,
@@ -43,7 +43,7 @@ func NewAccountUsecase(
 	}
 }
 
-func (a accountUsecase) CreateAccount(ctx context.Context, params *entity.CreateAccountParams) (*entity.Account, error) {
+func (a createAccountUsecase) CreateAccount(ctx context.Context, params *entity.CreateAccountParams) (*entity.Account, error) {
 	// Check if phone number already exists
 	customer, err := a.customerRepository.FindByPhoneNumber(ctx, params.PhoneNumber)
 	if err != nil && err != entity.ErrCustomerNotFound {
@@ -99,7 +99,7 @@ func (a accountUsecase) CreateAccount(ctx context.Context, params *entity.Create
 }
 
 // createAccountWithRetry validates if the account number is unique during the insert operation
-func (a accountUsecase) createAccountWithRetry(ctx context.Context, customer *entity.Customer, maxRetries int) (*entity.Account, error) {
+func (a createAccountUsecase) createAccountWithRetry(ctx context.Context, customer *entity.Customer, maxRetries int) (*entity.Account, error) {
 	var (
 		err     error
 		account = &entity.Account{

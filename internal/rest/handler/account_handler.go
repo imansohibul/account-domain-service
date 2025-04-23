@@ -8,12 +8,23 @@ import (
 )
 
 type accountHandler struct {
-	accountUsecase AccountUsecase
+	createAccountUsecase CreateAccountUsecase
+	depositUsecaase      DepositUsecase
+	withdrawUsecase      WithdrawUsecase
+	getBalanceUsecase    GetBalanceUsecase
 }
 
-func NewAccountHandler(accountUsecase AccountUsecase) *accountHandler {
+func NewAccountHandler(
+	createAccountUsecase CreateAccountUsecase,
+	depositUsecase DepositUsecase,
+	withdrawUsecase WithdrawUsecase,
+	getBalanceUsecase GetBalanceUsecase,
+) *accountHandler {
 	return &accountHandler{
-		accountUsecase: accountUsecase,
+		createAccountUsecase: createAccountUsecase,
+		depositUsecaase:      depositUsecase,
+		withdrawUsecase:      withdrawUsecase,
+		getBalanceUsecase:    getBalanceUsecase,
 	}
 }
 
@@ -37,7 +48,7 @@ func (a accountHandler) CreateAccount(c echo.Context) error {
 		IdentityNumber: req.IdentityNumber,
 	}
 
-	account, err := a.accountUsecase.CreateAccount(ctx, params)
+	account, err := a.createAccountUsecase.CreateAccount(ctx, params)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"remark": err.Error()})
 	}
@@ -61,7 +72,7 @@ func (a accountHandler) Deposit(c echo.Context) error {
 		return err
 	}
 
-	transaction, err := a.accountUsecase.Deposit(ctx, req.AccountNumber, req.GetAmount())
+	transaction, err := a.depositUsecaase.Deposit(ctx, req.AccountNumber, req.GetAmount())
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"remark": err.Error()})
 	}
@@ -85,7 +96,7 @@ func (a accountHandler) Withdraw(c echo.Context) error {
 		return err
 	}
 
-	transaction, err := a.accountUsecase.Withdraw(ctx, req.AccountNumber, req.GetAmount())
+	transaction, err := a.withdrawUsecase.Withdraw(ctx, req.AccountNumber, req.GetAmount())
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"remark": err.Error()})
 	}
@@ -106,7 +117,7 @@ func (a accountHandler) GetBalance(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"remark": "Invalid request"})
 	}
 
-	balance, err := a.accountUsecase.GetBalance(ctx, accountNumber)
+	balance, err := a.getBalanceUsecase.GetBalance(ctx, accountNumber)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"remark": err.Error()})
 	}

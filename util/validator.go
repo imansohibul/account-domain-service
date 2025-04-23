@@ -6,12 +6,16 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var Validate *validator.Validate
+var validate *validator.Validate
 
 func init() {
-	Validate = validator.New()
-	Validate.RegisterValidation("nik", validateNIK)
-	Validate.RegisterValidation("fullname", validateFullname)
+	validate = validator.New()
+	validate.RegisterValidation("nik", validateNIK)
+	validate.RegisterValidation("fullname", validateFullname)
+}
+
+func GetValidator() *validator.Validate {
+	return validate
 }
 
 func validateNIK(fl validator.FieldLevel) bool {
