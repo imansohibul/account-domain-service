@@ -204,9 +204,9 @@ Generates mock files using mockgen
 | `make format`            | Format all Go code                       | `make format`                    |
 | `make download`          | Download Go dependencies                 | `make download`                  |
 | `make generate`          | Generate mock files                      | `make generate`                  |
-| `make migrate up`        | Apply all pending migrations             | `make migrate up`                |
-| `make migrate down`      | Rollback migrations                      | `make migrate down N=1`          |
-| `make migrate status`    | Check migration status                   | `make migrate status`            |
+| `make migrate up`        | Apply all pending migrations             | `make migrate MIGRATE_ARGS=up`                |
+| `make migrate down`      | Rollback migrations                      | `make migrate MIGRATE_ARGS=down N=1`          |
+| `make migrate status`    | Check migration status                   | `make migrate MIGRATE_ARGS=status`            |
 | `make create-db-migration` | Create new migration file            | `make create-db-migration NAME=create_users` |
 | `docker-compose up`      | Start all services with Docker           | `docker-compose up -d`           |
 | `docker-compose logs`    | View service logs                        | `docker-compose logs -f account-service` |
@@ -214,4 +214,5 @@ Generates mock files using mockgen
 **Key Flags:**
 - `N=1` - Specifies number of migrations to rollback
 - `NAME=migration_name` - Sets name for new migrations
+- `MIGRATE_ARGS=up` - Sets whether up or down migrations
 - `-d` - Run Docker containers in detached mode
