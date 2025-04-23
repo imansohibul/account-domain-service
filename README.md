@@ -8,6 +8,8 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17.4-blue)
 [![Docker Compose](https://img.shields.io/badge/docker--compose-3.9-blue)](https://docs.docker.com/compose/compose-file/compose-versioning/#version-39)
 
+[![Docker Compose](https://img.shields.io/badge/docker--compose-3.9-blue)](https://docs.docker.com/compose/compose-file/compose-versioning/#version-39)
+
 
 ## 📂 Project Structure
 
