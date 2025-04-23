@@ -75,3 +75,85 @@ Before you can start working on this project, ensure that you have the following
 - **Make**: Make is used for automating tasks. It is optional but recommended for running the commands in the Makefile. Install Make via [GNU Make](https://www.gnu.org/software/make/).
 
 
+
+## 1. Clone Project
+```bash
+git clone https://github.com/imansohibul/account-domain-service.git
+cd account-domainn-service
+```
+
+## 2. Configure Environment
+```bash
+cp .env.sample .env
+nano .env  # Edit with your configuration
+```
+
+
+## 3. Running the Service
+### Option A: With Docker
+```bash
+cp .env.sample .env
+nano .env  # Edit with your configuration
+```
+
+```bash
+# Start all services (app + PostgreSQL)
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f account-service
+```
+### Option B: Without Docker
+
+```bash
+# First start PostgreSQL container
+docker-compose up -d postgres-db
+
+# Then run the service
+make run
+```
+
+## 4. Database Migrations
+### Create New Migration
+```bash
+make generate-db-migration MIGRATE_NAME=init_schema
+```
+This creates new files in db/migrate/
+
+### Run Migrations
+```bash
+make migrate up
+```
+
+### Rollback Migrations
+```bash
+make migrate down N=1  # Rollback 1 step
+```
+
+## 5. Generate Mock
+```bash
+make generate
+```
+Generates mock files using mockgen
+
+
+## 6. Common Commands
+
+| Command                  | Description                              | Example Usage                     |
+|--------------------------|------------------------------------------|-----------------------------------|
+| `make build`             | Build the application binary             | `make build`                     |
+| `make run`               | Run the service locally                  | `make run`                       |
+| `make format`            | Format all Go code                       | `make format`                    |
+| `make download`          | Download Go dependencies                 | `make download`                  |
+| `make generate`          | Generate mock files                      | `make generate`                  |
+| `make migrate up`        | Apply all pending migrations             | `make migrate up`                |
+| `make migrate down`      | Rollback migrations                      | `make migrate down N=1`          |
+| `make migrate status`    | Check migration status                   | `make migrate status`            |
+| `make generate-db-migration` | Create new migration file            | `make generate-db-migration NAME=create_users` |
+| `docker-compose up`      | Start all services with Docker           | `docker-compose up -d`           |
+| `docker-compose logs`    | View service logs                        | `docker-compose logs -f account-service` |
+
+**Key Flags:**
+- `N=1` - Specifies number of migrations to rollback
+- `NAME=migration_name` - Sets name for new migrations
+- `-d` - Run Docker containers in detached mode
