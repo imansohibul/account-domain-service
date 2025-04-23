@@ -35,7 +35,9 @@ func (a accountHandler) CreateAccount(c echo.Context) error {
 	)
 
 	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"remark": "Invalid request"})
+		return c.JSON(http.StatusBadRequest,
+			map[string]string{"remark": entity.ErrInvalidRequest.Error()},
+		)
 	}
 
 	if err := c.Validate(req); err != nil {
@@ -65,7 +67,9 @@ func (a accountHandler) Deposit(c echo.Context) error {
 	)
 
 	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"remark": "Invalid request"})
+		return c.JSON(http.StatusBadRequest,
+			map[string]string{"remark": entity.ErrInvalidRequest.Error()},
+		)
 	}
 
 	if err := c.Validate(req); err != nil {
@@ -89,7 +93,9 @@ func (a accountHandler) Withdraw(c echo.Context) error {
 	)
 
 	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"remark": "Invalid request"})
+		return c.JSON(http.StatusBadRequest,
+			map[string]string{"remark": entity.ErrInvalidRequest.Error()},
+		)
 	}
 
 	if err := c.Validate(req); err != nil {
@@ -114,7 +120,9 @@ func (a accountHandler) GetBalance(c echo.Context) error {
 
 	// If account number is not provided, return bad request
 	if accountNumber == "" {
-		return c.JSON(http.StatusBadRequest, map[string]string{"remark": "Invalid request"})
+		return c.JSON(http.StatusBadRequest,
+			map[string]string{"remark": entity.ErrInvalidRequest.Error()},
+		)
 	}
 
 	balance, err := a.getBalanceUsecase.GetBalance(ctx, accountNumber)

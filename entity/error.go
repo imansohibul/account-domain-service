@@ -20,4 +20,7 @@ var (
 
 	//ErrCustomerIdentityAlreadyExists is returned when a customer with the same NIK already exists
 	ErrCustomerIdentityAlreadyExists = errors.New("NIK sudah terdaftar")
+
+	// ErrInvalidRequest is returned when the request is invalid
+	ErrInvalidRequest = errors.New("Permintaan tidak valid")
 )
