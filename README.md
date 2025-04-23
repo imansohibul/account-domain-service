@@ -26,7 +26,7 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 │   ├── repository/          # Data access layer (Postgres, etc.)
 │   ├── rest/
 │   │   ├── handler/         # Echo handlers (controllers)
-|   |   ├── middleware/         # Custom middleware if any
+|   |   ├── middleware/      # Custom middleware if any
 │   │   ├── server/          # Server setup, routing, and middleware
 │   └── usecase/             # Application use cases (interactors)
 ├── util/                    # Helper functions (e.g. validator, logging, formatting)
