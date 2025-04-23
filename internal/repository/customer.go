@@ -41,7 +41,7 @@ func (c customerRepository) CreateCustomer(ctx context.Context, newCustomer *ent
 
 func (c customerRepository) FindByPhoneNumber(ctx context.Context, phoneNumber string) (*entity.Customer, error) {
 	customerRecord := new(customer)
-	err := c.db.Find(ctx, customerRecord, where.Eq("phone_number = ?", phoneNumber))
+	err := c.db.Find(ctx, customerRecord, where.Eq("phone_number", phoneNumber))
 	if err != nil && errors.Is(err, rel.ErrNotFound) {
 		return nil, entity.ErrCustomerNotFound
 	} else if err != nil {

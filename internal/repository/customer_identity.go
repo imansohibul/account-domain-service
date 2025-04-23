@@ -41,7 +41,7 @@ func (c customerIdentityRepository) CreateCustomerIdentity(ctx context.Context, 
 
 func (c customerIdentityRepository) FindByIdentity(ctx context.Context, identityType entity.CustomerIdentityType, identityNumber string) (*entity.CustomerIdentity, error) {
 	customerIdentityRecord := new(customerIdentity)
-	err := c.db.Find(ctx, customerIdentityRecord, where.Eq("identity_type = ?", int(identityType)), where.Eq("identity_number = ?", identityNumber))
+	err := c.db.Find(ctx, customerIdentityRecord, where.Eq("identity_type", int(identityType)), where.Eq("identity_number", identityNumber))
 	if err != nil && errors.Is(err, rel.ErrNotFound) {
 		return nil, entity.ErrCustomerIdentityNotFound
 	} else if err != nil {

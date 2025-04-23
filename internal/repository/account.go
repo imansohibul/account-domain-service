@@ -46,8 +46,8 @@ func (a accountRepository) CreateAccount(ctx context.Context, newAccount *entity
 
 func (a accountRepository) FindByAccountNumber(ctx context.Context, accountType entity.AccountType, accountNumber string, lock bool) (*entity.Account, error) {
 	querier := []rel.Querier{
-		where.Eq("account_type = ?", int(accountType)),
-		where.Eq("account_number = ?", accountNumber),
+		where.Eq("account_type", int(accountType)),
+		where.Eq("account_number", accountNumber),
 	}
 
 	if lock {
