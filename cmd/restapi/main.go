@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -26,7 +27,7 @@ func main() {
 	go handleGracefulShutdown(ctx, restAPIServer, idleConnsClosed)
 
 	logger.Info(ctx, "Starting REST API server...", nil)
-	if err := restAPIServer.Start(); err != nil {
+	if err := restAPIServer.Start(); err != http.ErrServerClosed {
 		logger.Fatal(ctx, "REST API server stopped with error", err, nil)
 	}
 
