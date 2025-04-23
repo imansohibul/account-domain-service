@@ -69,7 +69,7 @@ func (l *zapLogger) Fatal(ctx context.Context, msg string, err error, fields map
 func (l *zapLogger) WithDuration(ctx context.Context, operation string, fields map[string]interface{}) func(err *error) {
 	start := time.Now()
 	return func(err *error) {
-		fields["duration"] = time.Since(start).String()
+		fields["duration"] = time.Since(start).Milliseconds()
 		if err != nil && *err != nil {
 			l.Error(ctx, operation, *err, fields)
 		} else {
