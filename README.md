@@ -32,7 +32,7 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 │   │   ├── server/          # Server setup, routing, and middleware
 │   └── usecase/             # Application use cases (interactors)
 ├── util/                    # Helper functions (e.g. validator, logging, formatting)
-├── docker-compose.yml       # Defines services (API, DB) for deployment
+├── docker-compose.yaml       # Defines services (API, DB) for deployment
 ├── .env.sample              # Sample environment configuration
 └── Makefile                 # Common scripts for building, testing, running
 ```
@@ -53,7 +53,7 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 ### 🐳 Docker-Based Deployment
 
 - Uses `Dockerfile` in `build` for containerizing the account service.
-- Managed by `docker-compose.yml`, which defines two main services:
+- Managed by `docker-compose.yaml`, which defines two main services:
   - `account-service`: The account-domain-service (REST API).
   - `postgres-db`: The PostgreSQL database.
 
