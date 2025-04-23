@@ -15,7 +15,7 @@ type Logger interface {
 	Error(ctx context.Context, msg string, err error, fields map[string]interface{})
 	Fatal(ctx context.Context, msg string, err error, fields map[string]interface{})
 
-	WithDuration(ctx context.Context, operation string, fields map[string]interface{}) func(err error)
+	WithDuration(ctx context.Context, operation string, fields map[string]interface{}) func(err *error)
 	Sync() error
 }
 
@@ -56,18 +56,12 @@ func (l *zapLogger) Fatal(ctx context.Context, msg string, err error, fields map
 	l.log.Fatal(msg, fs...)
 }
 
-func (l *zapLogger) With(fields map[string]interface{}) Logger {
-	return &zapLogger{
-		log: l.log.With(convertFields(fields)...),
-	}
-}
-
-func (l *zapLogger) WithDuration(ctx context.Context, operation string, fields map[string]interface{}) func(err error) {
+func (l *zapLogger) WithDuration(ctx context.Context, operation string, fields map[string]interface{}) func(err *error) {
 	start := time.Now()
-	return func(err error) {
+	return func(err *error) {
 		fields["duration"] = time.Since(start).String()
 		if err != nil {
-			l.Error(ctx, operation, err, fields)
+			l.Error(ctx, operation, *err, fields)
 		} else {
 			l.Info(ctx, operation, fields)
 		}

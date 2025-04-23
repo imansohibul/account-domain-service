@@ -60,33 +60,25 @@ func (a createAccountUsecase) CreateAccount(ctx context.Context, params *entity.
 		)
 	)
 
-	defer logger(err)
+	defer logger(&err)
 
-	// Check if phone number already exists
-	customer, err := a.customerRepository.FindByPhoneNumber(ctx, params.PhoneNumber)
-	if err != nil && err != entity.ErrCustomerNotFound {
+	// Validate phone number
+	err = a.validatePhoneNumber(ctx, params.PhoneNumber)
+	if err != nil {
 		return nil, err
 	}
 
-	if customer != nil {
-		return nil, entity.ErrPhoneNumberAlreadyExists
-	}
-
-	// Check if customer already exists
-	customerIdentity, err := a.customerIdentityRepository.FindByIdentity(ctx, entity.IdentityTypeNIK, params.IdentityNumber)
-	if err != nil && err != entity.ErrCustomerIdentityNotFound {
+	// Validate identity number
+	err = a.validateIdentityNumber(ctx, params.IdentityNumber)
+	if err != nil {
 		return nil, err
-	}
-
-	if customerIdentity != nil {
-		return nil, entity.ErrCustomerIdentityAlreadyExists
 	}
 
 	account := new(entity.Account)
 
 	err = a.transactionManager.WithTransaction(ctx, func(ctx context.Context) error {
 		// Create customer
-		customer, err = a.customerRepository.CreateCustomer(ctx, &entity.Customer{
+		customer, err := a.customerRepository.CreateCustomer(ctx, &entity.Customer{
 			Fullname:    params.Fullname,
 			PhoneNumber: params.PhoneNumber,
 		})
@@ -95,7 +87,7 @@ func (a createAccountUsecase) CreateAccount(ctx context.Context, params *entity.
 		}
 
 		// Create customer identity
-		customerIdentity, err = a.customerIdentityRepository.CreateCustomerIdentity(ctx, &entity.CustomerIdentity{
+		_, err = a.customerIdentityRepository.CreateCustomerIdentity(ctx, &entity.CustomerIdentity{
 			CustomerID:     customer.ID,
 			IdentityType:   entity.IdentityTypeNIK,
 			IdentityNumber: params.IdentityNumber,
@@ -114,6 +106,34 @@ func (a createAccountUsecase) CreateAccount(ctx context.Context, params *entity.
 	})
 
 	return account, err
+}
+
+// validatePhoneNumber checks if the phone number already exists
+func (a createAccountUsecase) validatePhoneNumber(ctx context.Context, phoneNumber string) error {
+	customer, err := a.customerRepository.FindByPhoneNumber(ctx, phoneNumber)
+	if err != nil && err != entity.ErrCustomerNotFound {
+		return err
+	}
+
+	if customer != nil {
+		return entity.ErrPhoneNumberAlreadyExists
+	}
+
+	return nil
+}
+
+// validateIdentityNumber checks if the identity number already exists
+func (a createAccountUsecase) validateIdentityNumber(ctx context.Context, identityNumber string) error {
+	customerIdentity, err := a.customerIdentityRepository.FindByIdentity(ctx, entity.IdentityTypeNIK, identityNumber)
+	if err != nil && err != entity.ErrCustomerIdentityNotFound {
+		return err
+	}
+
+	if customerIdentity != nil {
+		return entity.ErrCustomerIdentityAlreadyExists
+	}
+
+	return nil
 }
 
 // createAccountWithRetry validates if the account number is unique during the insert operation
