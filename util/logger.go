@@ -70,7 +70,7 @@ func (l *zapLogger) WithDuration(ctx context.Context, operation string, fields m
 	start := time.Now()
 	return func(err *error) {
 		fields["duration"] = time.Since(start).String()
-		if err != nil {
+		if err != nil && *err != nil {
 			l.Error(ctx, operation, *err, fields)
 		} else {
 			l.Info(ctx, operation, fields)

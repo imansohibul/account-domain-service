@@ -42,8 +42,20 @@ func NewRestAPI() (*server.RestAPIServer, error) {
 			transactionRepository,
 			logger,
 		)
+
+		depositUsecase = usecase.NewDepositUsecase(
+			accountRepository,
+			transactionRepository,
+			transactionManager,
+			logger,
+		)
 	)
 
 	// Initialize Rest API server
-	return server.NewRestAPIServer(createAccountUsecase, nil, nil, nil), nil
+	return server.NewRestAPIServer(
+		createAccountUsecase,
+		depositUsecase,
+		nil,
+		nil,
+	), nil
 }

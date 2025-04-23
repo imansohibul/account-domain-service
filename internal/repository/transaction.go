@@ -16,7 +16,7 @@ type transactionRepository struct {
 type transaction struct {
 	ID             uint            `db:"id"`
 	AccountID      uint            `db:"account_id"`
-	Type           int             `db:"transaction_type"`
+	Type           int             `db:"type"`
 	Amount         decimal.Decimal `db:"amount"`
 	InitialBalance decimal.Decimal `db:"initial_balance"`
 	FinalBalance   decimal.Decimal `db:"final_balance"`

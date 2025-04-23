@@ -65,6 +65,16 @@ func (a accountRepository) FindByAccountNumber(ctx context.Context, accountType 
 	return a.toEntityAccount(accountRecord), nil
 }
 
+func (a accountRepository) UpdateAccount(ctx context.Context, account *entity.Account) (*entity.Account, error) {
+	accountRecord := a.fromEntityAccount(account)
+	err := a.db.Update(ctx, accountRecord)
+	if err != nil {
+		return nil, err
+	}
+
+	return a.toEntityAccount(accountRecord), nil
+}
+
 func (a accountRepository) fromEntityAccount(accountEntity *entity.Account) *account {
 	return &account{
 		ID:            accountEntity.ID,

@@ -81,6 +81,11 @@ func (a accountHandler) Deposit(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"remark": err.Error()})
 	}
 
+	// Check if the transaction is nil
+	if transaction == nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"remark": "transaction is nil"})
+	}
+
 	return c.JSON(http.StatusOK, &DepositResponse{
 		AccountBalance: transaction.FinalBalance,
 	})

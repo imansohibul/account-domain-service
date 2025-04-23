@@ -17,7 +17,7 @@ type CreateAccountResponse struct {
 // DepositRequest is the request body for depositing money into an account
 type DepositRequest struct {
 	AccountNumber string `json:"no_rekening" validate:"required"`
-	Amount        int64  `json:"nominal" validate:"required, gt=0, lt=1000000000"`
+	Amount        int64  `json:"nominal" validate:"required,gt=0,lt=1000000000"`
 }
 
 // GetAmount converts the amount from int64 to decimal.Decimal
@@ -33,7 +33,7 @@ type DepositResponse struct {
 // WithdrawRequest is the request body for withdrawing money from an account
 type WithdrawRequest struct {
 	AccountNumber string `json:"no_rekening" validate:"required"`
-	Amount        int64  `json:"nominal" validate:"required, gt=0, lt=100000000"`
+	Amount        int64  `json:"nominal" validate:"required,gt=0,lt=100000000"`
 }
 
 // GetAmount converts the amount from int64 to decimal.Decimal
