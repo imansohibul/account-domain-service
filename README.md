@@ -35,7 +35,6 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 ├── docker-compose.yml       # Defines services (API, DB) for deployment
 ├── .env.sample              # Sample environment configuration
 └── Makefile                 # Common scripts for building, testing, running
----
 ```
 
 ### 🧱 Architectural Layers
