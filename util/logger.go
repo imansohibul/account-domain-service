@@ -2,10 +2,16 @@ package util
 
 import (
 	"context"
+	"sync"
 	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+)
+
+var (
+	once     sync.Once
+	instance Logger
 )
 
 type Logger interface {
@@ -23,9 +29,13 @@ type zapLogger struct {
 	log *zap.Logger
 }
 
-func NewZapLogger() Logger {
-	z, _ := zap.NewProduction()
-	return &zapLogger{log: z}
+// GetZapLogger returns a singleton instance of Logger
+func GetZapLogger() Logger {
+	once.Do(func() {
+		z, _ := zap.NewProduction() // or zap.NewDevelopment() for dev mode
+		instance = &zapLogger{log: z}
+	})
+	return instance
 }
 
 func (l *zapLogger) Debug(ctx context.Context, msg string, fields map[string]interface{}) {

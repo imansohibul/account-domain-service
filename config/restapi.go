@@ -15,10 +15,13 @@ func NewRestAPI() (*server.RestAPIServer, error) {
 	}
 
 	// Initialize database connection
-	db := initPostgresDatabase(serviceConfig)
+	db, err := initPostgresDatabase(serviceConfig)
+	if err != nil {
+		return nil, err
+	}
 
 	// Initialize logger
-	logger := util.NewZapLogger()
+	logger := util.GetZapLogger()
 
 	// Initialize repositories
 	var (

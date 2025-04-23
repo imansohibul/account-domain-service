@@ -3,14 +3,15 @@ package config
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
+	"time"
 
 	"github.com/go-rel/postgres"
 	"github.com/go-rel/rel"
 	"github.com/kelseyhightower/envconfig"
 	_ "github.com/lib/pq"
 	"github.com/subosito/gotenv"
+	"imansohibul.my.id/account-domain-service/util"
 )
 
 type ServiceConfig struct {
@@ -53,19 +54,38 @@ func (db DatabaseConfig) PostgresDSN() string {
 	)
 }
 
-func initPostgresDatabase(cfg ServiceConfig) rel.Repository {
-	dsn := cfg.DatabaseConfig.PostgresDSN()
-
-	log.Println("Connecting to PostgreSQL database...", dsn)
+func initPostgresDatabase(cfg ServiceConfig) (rel.Repository, error) {
 	adapter, err := postgres.Open(cfg.DatabaseConfig.PostgresDSN())
 	if err != nil {
-		panic(fmt.Sprintf("failed to connect to database: %v", err))
+		return nil, fmt.Errorf("failed to open database connection: %v", err)
 	}
 
 	if err := adapter.Ping(context.Background()); err != nil {
 		adapter.Close()
-		panic(fmt.Sprintf("failed to ping database: %v", err))
+		return nil, fmt.Errorf("failed to ping database: %v", err)
 	}
 
-	return rel.New(adapter)
+	rel := rel.New(adapter)
+	rel.Instrumentation(DatabaseLogger)
+
+	return rel, nil
+}
+
+// DatabaseLogger instrumentation to log queries and rel operation.
+func DatabaseLogger(ctx context.Context, op string, message string, args ...any) func(err error) {
+	start := time.Now()
+
+	return func(err error) {
+		duration := time.Since(start)
+		fields := map[string]interface{}{
+			"op":       op,
+			"duration": duration,
+		}
+
+		if err != nil {
+			util.GetZapLogger().Error(ctx, message, err, fields)
+		} else {
+			util.GetZapLogger().Info(ctx, message, fields)
+		}
+	}
 }

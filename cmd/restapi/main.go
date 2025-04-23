@@ -2,34 +2,36 @@ package main
 
 import (
 	"context"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"imansohibul.my.id/account-domain-service/config"
 	"imansohibul.my.id/account-domain-service/internal/rest/server"
+	"imansohibul.my.id/account-domain-service/util"
 )
+
+var logger = util.GetZapLogger()
 
 func main() {
 	ctx := context.Background()
 
 	restAPIServer, err := config.NewRestAPI()
 	if err != nil {
-		log.Fatalf("failed to initialize REST API server: %v", err)
+		logger.Fatal(ctx, "failed to initialize REST API server", err, nil)
 	}
 
 	// Graceful shutdown handler
 	idleConnsClosed := make(chan struct{})
 	go handleGracefulShutdown(ctx, restAPIServer, idleConnsClosed)
 
-	log.Println("Starting REST API server...")
+	logger.Info(ctx, "Starting REST API server...", nil)
 	if err := restAPIServer.Start(); err != nil {
-		log.Printf("REST API server stopped with error: %v", err)
+		logger.Fatal(ctx, "REST API server stopped with error", err, nil)
 	}
 
 	<-idleConnsClosed
-	log.Println("Server shut down gracefully")
+	logger.Info(ctx, "Server shut down gracefully", nil)
 }
 
 func handleGracefulShutdown(ctx context.Context, restAPIServer *server.RestAPIServer, done chan struct{}) {
@@ -38,10 +40,10 @@ func handleGracefulShutdown(ctx context.Context, restAPIServer *server.RestAPISe
 	signal.Notify(sigint, os.Interrupt, syscall.SIGTERM)
 	<-sigint
 
-	log.Println("Shutdown signal received")
+	logger.Warn(ctx, "Shutdown signal received", nil)
 
 	if err := restAPIServer.Shutdown(ctx); err != nil {
-		log.Printf("Error during server shutdown: %v", err)
+		logger.Fatal(ctx, "Error during server shutdown", err, nil)
 	}
 
 	close(done)
