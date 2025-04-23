@@ -33,7 +33,7 @@ func (c customerRepository) CreateCustomer(ctx context.Context, newCustomer *ent
 	if err != nil && !errors.Is(err, rel.ErrUniqueConstraint) {
 		return nil, err
 	} else if errors.Is(err, rel.ErrUniqueConstraint) {
-		return nil, entity.ErrPhoneNumberAlreadyExists
+		return nil, entity.ErrAccountAlreadyExists
 	}
 
 	return c.toEntityCustomer(customerRecord), nil

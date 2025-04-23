@@ -164,7 +164,7 @@ func (a createAccountUsecase) createAccountWithRetry(ctx context.Context, custom
 		retry.DelayType(retry.FixedDelay),
 		retry.Delay(10*time.Microsecond),
 		retry.RetryIf(func(err error) bool {
-			return errors.Is(err, entity.ErrDuplicateAccountNumber)
+			return errors.Is(err, entity.ErrAccountAlreadyExists)
 		}),
 		retry.OnRetry(func(n uint, err error) {
 			// log the retry attempt

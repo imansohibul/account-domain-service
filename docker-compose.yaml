@@ -4,15 +4,15 @@ services:
   account-service:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: build/restapi/Dockerfile
     ports:
-      - "8080:8080"
+      - "8080:8081"
     environment:
-      DB_HOST: ${SERVICE_DB_HOST}
-      DB_PORT: ${SERVICE_DB_PORT}
-      DB_USERNAME: ${SERVICE_DB_USERNAME}
-      DB_PASSWORD: ${SERVICE_DB_PASSWORD}
-      DB_NAME: ${SERVICE_DB_NAME}
+      SERVICE_DB_HOST: ${SERVICE_DB_HOST}
+      SERVICE_DB_PORT: ${SERVICE_DB_PORT}
+      SERVICE_DB_USERNAME: ${SERVICE_DB_USERNAME}
+      SERVICE_DB_PASSWORD: ${SERVICE_DB_PASSWORD}
+      SERVICE_DB_NAME: ${SERVICE_DB_NAME}
     depends_on:
       - postgres-db
     networks:

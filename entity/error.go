@@ -1,29 +1,34 @@
 package entity
 
-import "errors"
+// DomainError represents a custom error with a Code and Message
+type DomainError struct {
+	Code    string
+	Message string
+}
+
+func (e *DomainError) Error() string {
+	return e.Message
+}
+
+// DomainError creates a new AppError instance
+func NewDomainError(code, message string) *DomainError {
+	return &DomainError{Code: code, Message: message}
+}
 
 var (
-	// ErrAccountNotFound is returned when the requested account is not found
-	ErrAccountNotFound = errors.New("Nomor rekening tidak ditemukan")
+	// Account-related errors
+	ErrAccountNotFound      = NewDomainError("ACCOUNT_NOT_FOUND", "Nomor rekening tidak ditemukan")
+	ErrAccountAlreadyExists = NewDomainError("ACCOUNT_ALREADY_EXISTS", "Nomor rekening sudah terdaftar")
+	ErrInsufficientBalance  = NewDomainError("ACCOUNT_INSUFFICIENT_BALANCE", "Saldo tidak mencukupi")
 
-	// ErrAccountAlreadyExists is returned when an account with the same account number already exists
-	ErrInsufficientBalance = errors.New("Saldo tidak mencukupi")
+	// Customer-related errors
+	ErrCustomerNotFound         = NewDomainError("CUSTOMER_NOT_FOUND", "Nasabah tidak ditemukan")
+	ErrPhoneNumberAlreadyExists = NewDomainError("CUSTOMER_PHONE_NUMBER_EXISTS", "Nomor telepon sudah terdaftar")
 
-	// ErrDuplicateAccountNumber is returned when an account with the same account number already exists
-	ErrDuplicateAccountNumber = errors.New("Nomor rekening sudah terdaftar")
+	// Identity-related errors
+	ErrCustomerIdentityNotFound      = NewDomainError("CUSTOMTER_IDENTITY_NOT_FOUND", "Identitas nasabah tidak ditemukan")
+	ErrCustomerIdentityAlreadyExists = NewDomainError("CUSTOMER_IDENTITY_ALREADY_EXISTS", "NIK sudah terdaftar")
 
-	// ErrCustomerNotFound is returned when the requested customer is not found
-	ErrCustomerNotFound = errors.New("Nasabah tidak ditemukan")
-
-	// ErrPhoneNumberAlreadyExists is returned when a customer with the same phone number already exists
-	ErrPhoneNumberAlreadyExists = errors.New("Nomor telepon sudah terdaftar")
-
-	// ErrCustomerIdentityNotFound is returned when the requested customer identity is not found
-	ErrCustomerIdentityNotFound = errors.New("Identitas nasabah tidak ditemukan")
-
-	//ErrCustomerIdentityAlreadyExists is returned when a customer with the same NIK already exists
-	ErrCustomerIdentityAlreadyExists = errors.New("NIK sudah terdaftar")
-
-	// ErrInvalidRequest is returned when the request is invalid
-	ErrInvalidRequest = errors.New("Permintaan tidak valid")
+	// General errors
+	ErrInvalidRequest = NewDomainError("INVALID_REQUEST", "Permintaan tidak valid")
 )

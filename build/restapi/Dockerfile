@@ -9,13 +9,13 @@ RUN apk update && apk add --no-cache git
 
 # Copy the Go modules and install dependencies
 COPY go.mod go.sum ./
-RUN go mod tidy
+RUN go mod download
 
 # Copy the entire source code into the container
 COPY . .
 
 # Build the Go application
-RUN go build -o /bin/account-service .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /bin/account-service ./cmd
 
 # Step 2: Create the final image from a minimal Alpine-based image
 FROM alpine:3.21.3
@@ -30,7 +30,7 @@ WORKDIR /root/
 COPY --from=builder /bin/account-service /bin/
 
 # Expose the port the app will run on
-EXPOSE 8080
+EXPOSE 8081
 
 # Set the default command to run the application
-CMD ["/bin/account-service"]
+CMD ["/bin/account-service", "api", "--address", ":8081"]

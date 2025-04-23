@@ -38,7 +38,7 @@ func (a accountRepository) CreateAccount(ctx context.Context, newAccount *entity
 	if err != nil && !errors.Is(err, rel.ErrUniqueConstraint) {
 		return nil, err
 	} else if errors.Is(err, rel.ErrUniqueConstraint) {
-		return nil, entity.ErrDuplicateAccountNumber
+		return nil, entity.ErrAccountAlreadyExists
 	}
 
 	return a.toEntityAccount(accountRecord), nil
