@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 
+	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"imansohibul.my.id/account-domain-service/internal/rest/handler"
@@ -32,6 +33,9 @@ func NewRestAPIServer(
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 	e.Use(middleware.RequestID())
+	e.Use(echoprometheus.NewMiddleware("account-domain-service")) // adds middleware to gather metrics
+
+	e.GET("/metrics", echoprometheus.NewHandler()) // adds route to serve gathered metrics
 
 	return &RestAPIServer{
 		echo:                 e,
