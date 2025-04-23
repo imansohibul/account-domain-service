@@ -180,12 +180,12 @@ This creates new files in db/migrate/
 
 ### Run Migrations
 ```bash
-make migrate up
+make migrate MIGRATE_ARGS=up
 ```
 
 ### Rollback Migrations
 ```bash
-make migrate down N=1  # Rollback 1 step
+make migrate MIGRATE_ARGS=down N=1  # Rollback 1 step
 ```
 
 ## 5. Generate Mock
