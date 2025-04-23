@@ -56,6 +56,11 @@ func NewRestAPI() (*server.RestAPIServer, error) {
 			transactionManager,
 			logger,
 		)
+
+		getBalanceUsecase = usecase.NewGetBalanceUsecase(
+			accountRepository,
+			logger,
+		)
 	)
 
 	// Initialize Rest API server
@@ -63,6 +68,6 @@ func NewRestAPI() (*server.RestAPIServer, error) {
 		createAccountUsecase,
 		depositUsecase,
 		withdrawUsecase,
-		nil,
+		getBalanceUsecase,
 	), nil
 }
