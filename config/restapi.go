@@ -49,13 +49,20 @@ func NewRestAPI() (*server.RestAPIServer, error) {
 			transactionManager,
 			logger,
 		)
+
+		withdrawUsecase = usecase.NewWithdrawUsecase(
+			accountRepository,
+			transactionRepository,
+			transactionManager,
+			logger,
+		)
 	)
 
 	// Initialize Rest API server
 	return server.NewRestAPIServer(
 		createAccountUsecase,
 		depositUsecase,
-		nil,
+		withdrawUsecase,
 		nil,
 	), nil
 }

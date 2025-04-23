@@ -6,6 +6,9 @@ var (
 	// ErrAccountNotFound is returned when the requested account is not found
 	ErrAccountNotFound = errors.New("Nomor rekening tidak ditemukan")
 
+	// ErrAccountAlreadyExists is returned when an account with the same account number already exists
+	ErrInsufficientBalance = errors.New("Saldo tidak mencukupi")
+
 	// ErrDuplicateAccountNumber is returned when an account with the same account number already exists
 	ErrDuplicateAccountNumber = errors.New("Nomor rekening sudah terdaftar")
 
