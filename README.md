@@ -32,7 +32,7 @@ This project follows a **modular clean architecture** pattern. It ensures high m
 │   │   ├── server/          # Server setup, routing, and middleware
 │   └── usecase/             # Application use cases (interactors)
 ├── util/                    # Helper functions (e.g. validator, logging, formatting)
-├── docker-compose.yaml       # Defines services (API, DB) for deployment
+├── docker-compose.yaml      # Defines services (API, DB) for deployment
 ├── .env.sample              # Sample environment configuration
 └── Makefile                 # Common scripts for building, testing, running
 ```
