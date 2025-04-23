@@ -4,7 +4,7 @@ services:
   account-service:
     build:
       context: .
-      dockerfile: build/restapi/Dockerfile
+      dockerfile: build/Dockerfile
     ports:
       - "8080:8081"
     environment:
